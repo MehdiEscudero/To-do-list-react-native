@@ -23,6 +23,9 @@ target 'todolist' do
   end
 end
 
+pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
+
 target 'todolist-tvOS' do
   # Pods for todolist-tvOS
 

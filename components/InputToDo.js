@@ -6,24 +6,20 @@ class Todo extends React.Component {
     super(props);
 
     this.state = {
-      input: '',
-      buttonDisabled: true,
+      title: '',
+      todo: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(text) {
-    if (text === '') {
-      this.setState({input: text, buttonDisabled: true});
-    } else {
-      this.setState({input: text, buttonDisabled: false});
-    }
+  handleChange(text, stateToChange) {
+    this.setState({[stateToChange]: text});
   }
 
   handleSubmit() {
-    this.setState({input: '', buttonDisabled: true});
-    // this.props.onAddToDo(this.state.input)
+    this.props.onAddToDo({title: this.state.title, todo: this.state.todo});
+    this.setState({todo: '', title: ''});
   }
 
   render() {
@@ -31,10 +27,16 @@ class Todo extends React.Component {
       <Block row>
         <Block flex={8}>
           <Input
-            onChangeText={(e) => this.handleChange(e)}
+            placeholder="Ton titre ici"
+            value={this.state.title}
+            onChangeText={(text) => this.handleChange(text, 'title')}
+          />
+
+          <Input
+            onChangeText={(text) => this.handleChange(text, 'todo')}
             multiline
             placeholder="Quelle est votre tâche ?"
-            value={this.state.input}
+            value={this.state.todo}
             style={{
               justifyContent: 'flex-start',
               alignItems: 'flex-start',
@@ -45,12 +47,20 @@ class Todo extends React.Component {
         </Block>
         <Block flex={2}>
           <Button
-            disabled={this.state.buttonDisabled}
+            disabled={
+              this.state.title.length > 0 && this.state.todo.length > 0
+                ? false
+                : true
+            }
             onlyIcon
             icon="rightcircle"
             iconFamily="antdesign"
             iconSize={30}
-            color={this.state.buttonDisabled ? 'lightgrey' : 'primary'}
+            color={
+              this.state.title.length > 0 && this.state.todo.length > 0
+                ? 'primary'
+                : 'lightgrey'
+            }
             iconColor="#fff"
             style={{width: 40, height: 40}}
             onPress={() => this.handleSubmit()}></Button>
